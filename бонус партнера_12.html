@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Бонус партнёра</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background: #F8F9FA;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .promo-wrapper {
+      max-width: 480px;
+      width: 100%;
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 28px 24px 32px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      transition: box-shadow 0.3s;
+    }
+    .promo-wrapper:hover {
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .promo-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .promo-header h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #1F2937;
+      line-height: 1.2;
+    }
+    .promo-header h2 span {
+      color: #07aed9;
+    }
+    .promo-sub {
+      color: #6B7280;
+      font-size: 14px;
+      margin-top: -4px;
+      margin-bottom: 24px;
+    }
+
+    /* Ползунок */
+    .slider-group {
+      margin-bottom: 24px;
+    }
+    .slider-group .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+    .slider-group .slider-header .label {
+      font-weight: 600;
+      color: #1F2937;
+      font-size: 15px;
+    }
+    .slider-group .slider-header .value {
+      font-weight: 700;
+      color: #07aed9;
+      font-size: 20px;
+    }
+    .slider-group input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 4px;
+      background: #E5E7EB;
+      outline: none;
+      transition: background 0.2s;
+      margin: 12px 0 6px;
+    }
+    .slider-group input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #07aed9;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(7, 174, 217, 0.4);
+      transition: box-shadow 0.2s;
+      border: 2px solid #FFFFFF;
+    }
+    .slider-group input[type="range"]::-webkit-slider-thumb:hover {
+      box-shadow: 0 6px 14px rgba(7, 174, 217, 0.5);
+    }
+    .slider-group input[type="range"]::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #07aed9;
+      cursor: pointer;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 4px 10px rgba(7, 174, 217, 0.4);
+    }
+    .slider-group .range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #9CA3AF;
+      font-weight: 500;
+    }
+
+    /* Переключатель */
+    .toggle-wrapper {
+      position: relative;
+      background: #F3F4F6;
+      border-radius: 12px;
+      padding: 4px;
+      display: flex;
+      border: 1px solid #E5E7EB;
+      height: 56px;
+      overflow: hidden;
+      cursor: pointer;
+      margin-bottom: 24px;
+    }
+    .toggle-slider {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: calc(50% - 4px);
+      height: calc(100% - 8px);
+      background: #07aed9;
+      border-radius: 10px;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 12px rgba(7, 174, 217, 0.3);
+      will-change: transform;
+      z-index: 1;
+    }
+    .toggle-option {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #6B7280;
+      background: transparent;
+      transition: color 0.2s;
+      cursor: pointer;
+      user-select: none;
+      z-index: 2;
+      position: relative;
+      border-radius: 10px;
+    }
+    .toggle-option.active {
+      color: #FFFFFF;
+    }
+    .toggle-option i {
+      margin-right: 8px;
+    }
+
+    /* Результат */
+    .result-box {
+      padding: 20px;
+      background: #F0F9FF;
+      border-radius: 16px;
+      border-left: 6px solid #07aed9;
+      margin-top: 4px;
+      animation: fadeSlide 0.4s ease;
+    }
+    @keyframes fadeSlide {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .result-box .bonus-amount {
+      font-size: 28px;
+      font-weight: 800;
+      color: #07aed9;
+      margin: 4px 0 8px;
+    }
+    .result-box .bonus-detail {
+      font-size: 14px;
+      color: #4B5563;
+      line-height: 1.5;
+    }
+    .result-box .bonus-detail i {
+      color: #07aed9;
+      width: 20px;
+    }
+    .result-box .divider {
+      height: 1px;
+      background: #D1E8F0;
+      margin: 14px 0;
+    }
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .result-header .deal-badge {
+      background: #07aed9;
+      color: #fff;
+      padding: 2px 14px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .footnote {
+      margin-top: 16px;
+      font-size: 13px;
+      color: #9CA3AF;
+      text-align: center;
+      border-top: 1px solid #E5E7EB;
+      padding-top: 16px;
+    }
+    .footnote i {
+      margin-right: 6px;
+    }
+
+    @media (max-width: 420px) {
+      .promo-wrapper { padding: 20px 16px; }
+      .toggle-option { font-size: 14px; }
+      .result-box .bonus-amount { font-size: 24px; }
+      .slider-group .slider-header .value { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+<div class="promo-wrapper">
+  <div class="promo-header">
+    <h2>Бонус <span>партнёра</span></h2>
+  </div>
+  <p class="promo-sub">Рассчитайте вознаграждение за каждого оформленного клиента</p>
+
+  <!-- Ползунок -->
+  <div class="slider-group">
+    <div class="slider-header">
+      <span class="label"><i class="fas fa-car" style="color:#07aed9; margin-right:8px;"></i>Стоимость авто</span>
+      <span class="value" id="priceDisplay">500 000 ₽</span>
+    </div>
+    <input type="range" id="priceSlider" min="150000" max="1500000" step="10000" value="500000">
+    <div class="range-labels">
+      <span>150 000 ₽</span>
+      <span>1 500 000 ₽</span>
+    </div>
+  </div>
+
+  <!-- Переключатель типа сделки -->
+  <div class="toggle-wrapper" id="dealToggle">
+    <div class="toggle-slider" id="dealSlider"></div>
+    <div class="toggle-option active" data-deal="credit">
+      <i class="fas fa-credit-card"></i> Автокредит
+    </div>
+    <div class="toggle-option" data-deal="lease">
+      <i class="fas fa-file-signature"></i> Авторассрочка
+    </div>
+  </div>
+
+  <!-- Результат -->
+  <div class="result-box" id="resultBox">
+    <div class="result-header">
+      <span style="font-weight:600; color:#1F2937;">Ваш бонус</span>
+      <span class="deal-badge" id="dealLabel">Автокредит</span>
+    </div>
+    <div class="bonus-amount" id="bonusAmount">0 ₽</div>
+    <div class="divider"></div>
+    <div class="bonus-detail">
+      <i class="fas fa-percent"></i> Ставка бонуса: <span id="rateDisplay">2.0%</span><br>
+      <i class="fas fa-calendar-alt"></i> Ориентировочный срок: <span id="termDisplay">до 8 лет</span>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <i class="fas fa-check-circle"></i> Начисляется после оформления сделки!
+  </div>
+</div>
+
+<script>
+  (function() {
+    'use strict';
+
+    const slider = document.getElementById('priceSlider');
+    const priceDisplay = document.getElementById('priceDisplay');
+    const dealOptions = document.querySelectorAll('#dealToggle .toggle-option');
+    const dealSlider = document.getElementById('dealSlider');
+    const bonusAmount = document.getElementById('bonusAmount');
+    const dealLabel = document.getElementById('dealLabel');
+    const rateDisplay = document.getElementById('rateDisplay');
+    const termDisplay = document.getElementById('termDisplay');
+
+    const DEAL_CONFIG = {
+      credit: { label: 'Автокредит', rate: 2.0, term: 'до 8 лет' },
+      lease:  { label: 'Авторассрочка', rate: 3.5, term: 'до 3 лет' }
+    };
+
+    let currentDeal = 'credit';
+
+    function updatePriceDisplay() {
+      const val = parseInt(slider.value, 10);
+      priceDisplay.textContent = val.toLocaleString('ru-RU') + ' ₽';
+    }
+
+    function updateBonus() {
+      const price = parseInt(slider.value, 10);
+      const config = DEAL_CONFIG[currentDeal];
+      const bonus = price * (config.rate / 100);
+      bonusAmount.textContent = Math.round(bonus).toLocaleString('ru-RU') + ' ₽';
+      dealLabel.textContent = config.label;
+      rateDisplay.textContent = config.rate + '%';
+      termDisplay.textContent = config.term;
+    }
+
+    function refresh() {
+      updatePriceDisplay();
+      updateBonus();
+    }
+
+    slider.addEventListener('input', refresh);
+
+    // Переключатель
+    function setupDealToggle() {
+      dealOptions.forEach(opt => {
+        opt.addEventListener('click', function() {
+          const deal = this.dataset.deal;
+          const index = Array.from(dealOptions).indexOf(this);
+          dealSlider.style.transform = `translateX(${index * 100}%)`;
+          dealOptions.forEach(o => o.classList.remove('active'));
+          this.classList.add('active');
+          currentDeal = deal;
+          refresh();
+        });
+      });
+      setTimeout(() => dealSlider.style.transform = 'translateX(0%)', 50);
+    }
+    setupDealToggle();
+
+    refresh();
+  })();
+</script>
+</body>
+</html>
